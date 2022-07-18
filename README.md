@@ -37,6 +37,7 @@ if user.has_role? :admin
   can :manage, :all
 else
   can :read, :all
+  can :edit, User if user.has_role?(:editor, User)
 end
 ```
 
@@ -46,10 +47,16 @@ a = Ability.new(u)
 a.can? :manage, :all
 # it returns - true
 
-a2 = Ability.new(u)
+a2 = Ability.new(u2)
 a2.can? :manage, :all
 # it returns - false, as nobody expect admin can manage
 
 a2.can? :read, :all
 # it returns - true, as other user can read
+
+a2.can? :edit, User
+# it returns - true
+
+a2.can? :edit, :all
+# it returns - false, as it only edit user
 ```
