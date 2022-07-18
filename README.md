@@ -9,13 +9,47 @@
 User.create!(email: "rutik@example.com",password: "password")
 User.create!(email: "r@example.com",password: "password")
 
+# Find The user
+u = User.find(1)
+u2 = User.find(2)
+
 ## For adding role
-user.add_role :admin
+u.add_role :admin
 
 ## For checking whether a user has some role
-user.has_role? :admin
+u.has_role? :admin
 
 ## For removing role from a user
-user.remove_role :admin
+u.remove_role :admin
 
+```
+
+## Add the resourcify method in all models in which you want to put a role on.
+```
+class Model < ActiveRecord::Base
+  resourcify
+end
+```
+
+## Edit Ability, add below code in initializer method
+```
+if user.has_role? :admin
+  can :manage, :all
+else
+  can :read, :all
+end
+```
+
+## Check if the user has admin rights
+```
+a = Ability.new(u)
+a.can? :manage, :all
+# it returns - true
+
+a2 = Ability.new(u)
+a2.can? :manage, :all
+# it returns - false, as nobody expect admin can manage
+
+a2.can? :read, :all
+# it returns - true, as other user can read
 ```
