@@ -8,6 +8,8 @@ class Ability
       can :manage, :all
     else
       can :read, :all
+      # only edit user if it has edior role
+      can :edit, User if user.has_role?(:editor, User)
     end
     # Define abilities for the user here. For example:
     #
